@@ -1,14 +1,15 @@
 name: Deploy ThreeJS Project
 
 on:
-  # Se activa cada vez que subes cambios a la rama main
   push:
     branches: ["main"]
-
-  # Permite ejecutarlo manualmente desde la pestaña Actions
   workflow_dispatch:
 
-# Permisos necesarios para publicar en GitHub Pages
+# ESTO EVITA EL ERROR DE MÚLTIPLES ARTEFACTOS
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pages: write
@@ -36,7 +37,7 @@ jobs:
       - name: Subir a GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Vite pone todo aquí
+          path: './dist'
 
       - name: Desplegar
         uses: actions/deploy-pages@v4
